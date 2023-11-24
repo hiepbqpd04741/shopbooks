@@ -1,0 +1,75 @@
+<%- include('_layout/header.ejs') %> <%- include('_layout/nav.ejs') %>
+<% function formatNumber(num) {
+  if (num == null) {
+    return "0"; 
+   } 
+   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); } 
+   %>
+<div class="row mb-2">
+  <div class="col-sm-6"></div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">NHÓM ĐƠN HÀNG</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="datatable1" class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th style="width: 5px">STT</th>
+                <th>MÃ ĐƠN HÀNG</th>
+                <th>EMAIL</th>
+                <th>TÌNH TRẠNG</th>
+                <th>TỔNG TIỀN</th>
+                <th>THAO TÁC</th>
+                <th>CHI TIẾT</th>
+                <th>NGÀY ĐẶT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach((order,index) => { %>
+                <tr class="text-center">
+                  <td><%= index + 1 %></td>
+                  <td><%= order.codeOrder %></td>
+                  <td><%= order.emailOrder %></td>
+                  <td style = "font-weight:bold" <% if (order.status === 'Processed') { %>color: red; <% } else if (order.status === 'Delivering') { %>color: #d51ac0;<% } else { %>color: #66CC33;<% } %>"><%= order.status %></td>
+
+                  <td><%= formatNumber(order.totalPrice) %></td>
+                  <td>
+                    <% if(order.status == 'Processed') { %>
+                      <a href="/admin/updateOrder/<%= order._id %>" class="btn btn-danger text-light">Giao Hàng</a>
+                    <% } else if(order.status == 'Complete') {  %>
+                      <button class='btn btn-success' disabled">Khách Hàng Đã Nhận</button>
+                    <% } else { %>
+                      <button class='btn btn-info' disabled">Đợi Phản Hồi</button>
+                    <% } %>
+                  </td>
+                  <td><a href="/admin/detailOrder/<%= order.codeOrder %>" class="btn btn-info text-light">Chi Tiết</a></td>
+                  <td><%= new Date(order.orderDate).toLocaleString() %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">VUI LÒNG THAO TÁC CẨN THẬN</div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row huydeV -->
+<script>
+  $(function () {
+    $("#datatable1").DataTable();
+  });
+</script>
+<%- include('_layout/footer.ejs') %>

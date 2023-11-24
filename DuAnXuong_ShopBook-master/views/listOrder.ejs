@@ -1,0 +1,85 @@
+<%- include('layout/header.ejs') %>  <%- include('layout/navbar.ejs', {categories: categories}) %>
+<% function formatNumber(num) {
+    if (num == null) {
+      return "0"; 
+     } 
+     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); } 
+     %>
+<section class="breadcrumb-section">
+  <h2 class="sr-only">Site Breadcrumb</h2>
+  <div class="container">
+    <div class="breadcrumb-contents">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item active">List Cart</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</section>
+<!-- Cart Page Start -->
+<main class="cart-page-main-block inner-page-sec-padding-bottom">
+  <div class="cart_area cart-area-padding">
+    <div class="container">
+      <div class="page-section-title">
+        <h1>List Cart</h1>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div>
+            <!-- Cart Table -->
+            <div class="cart-table table-responsive mb--40">
+              <table class="table">
+                <!-- Head Row -->
+                <thead>
+                  <tr>
+                    <th class="pro-thumbnail">Mã Đơn Hàng</th>
+                    <th class="pro-title">Ngày Đặt</th>
+                    <th class="pro-price">Tình Trạng</th>
+                    <th class="pro-quantity">Tổng Tiền</th>
+                    <th class="pro-subtotal">Thao Tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Product Row -->
+                  <% if (orders) { %>
+                    <% orders.forEach((order) => { %>
+                      <tr>
+                        <td><%= order.codeOrder %></td>
+                        <td><%= new Date(order.orderDate).toLocaleString() %></td>
+                        <td>
+                          <% if(order.status == 'Delivering') { %>
+                            <a class='btn btn-success text-white' href="/statusOrder/<%= order._id %>">Đã Nhận Hàng</a>
+                          <% } else {  %>
+                              <a href="" class=""><%= order.status %></a>
+                          <% } %>
+                        </td>
+                        <td><%= formatNumber(order.totalPrice) %></td>
+                        <td>
+                          <a href="/detailOrder/<%= order.codeOrder %>" class="btn btn-info text-light">Chi Tiết</a>
+                        </td>
+                      </tr>
+                    <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8" class="actions">
+                                  <p class="text-center text-danger font-weight-bold">No orders found.</p>
+                                </td>
+                              </tr>
+                          <% } %>
+                  <!-- Discount Row  -->
+                 
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Cart Page End -->
+<%- include('layout/footer.ejs') %>

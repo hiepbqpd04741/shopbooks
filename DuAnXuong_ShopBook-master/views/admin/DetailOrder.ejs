@@ -1,0 +1,72 @@
+<%- include('_layout/header.ejs') %> <%- include('_layout/nav.ejs') %>
+<% function formatNumber(num) {
+  if (num == null) {
+    return "0"; 
+   } 
+   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); } 
+   %>
+<div class="row mb-2">
+  <div class="col-sm-6"></div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">NHÓM ĐƠN HÀNG</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="datatable1" class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th style="width: 5px">STT</th>
+                <th>IMAGE</th>
+                <th>TITLE</th>
+                <th>PRICE</th>
+                <th>QUANTITY</th>
+                <th>TOTAL</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% detailOrders.products.forEach((product,huyit) => { %>
+                    <tr class="text-center">
+                        <td class="pro-remove">
+                            <%= huyit + 1 %>                    
+                        </td>
+                        <td class="pro-thumbnail">
+                          <a href="#"
+                            ><img width="150"
+                              src="<%= product.item.image %>"
+                              alt="<%= product.item.title %>"
+                          /></a>
+                        </td>
+                        <td class="pro-title"><a href="#"><%= product.item.title %></a></td>
+                        <td class="pro-price"><span><%= formatNumber(product.item.price) %></span></td>
+                        <td class="pro-quantity">
+                            <%= product.quantity %>
+                        </td>
+                        <td class="pro-subtotal"><span><%= formatNumber(product.item.price * product.quantity) %></span></td>
+                      </tr>
+                  <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">VUI LÒNG THAO TÁC CẨN THẬN</div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row huydeV -->
+<script>
+  $(function () {
+    $("#datatable1").DataTable();
+  });
+</script>
+<%- include('_layout/footer.ejs') %>

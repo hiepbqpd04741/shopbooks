@@ -1,0 +1,124 @@
+
+<%- include('_layout/header.ejs') %> <%- include('_layout/nav.ejs') %>
+
+<div class="row mb-2">
+  <div class="col-sm-6"></div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">NHÓM CATEGORY</h3>
+        <div class="text-right">
+            <a type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default" class="btn btn-info">THÊM DANH MỤC</a>
+        </div>
+    </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="datatable1" class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th>ID</th>
+                <th>NAME CATEGORY</th>
+                <th>THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i=0; i < showCategory.length; i++) { %>
+              <tr>
+                <td class="text-center">
+                    <%= showCategory[i].id %>
+                  </td>
+                <td class="text-center">
+                  <%= showCategory[i].categoryName %>
+                </td>
+                <td >
+                  <div class="d-flex">
+                    <button class="btn btn-info mr-2" data-toggle="modal" data-target="#huydev<%= showCategory[i]._id %>" type="submit" style="color: #fff" >
+                      Edit
+                    </button>
+                  <div class="modal fade" id="huydev<%= showCategory[i]._id %>">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">EDIT CATEGORY ID [ <%= showCategory[i]._id %> ]</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/admin/updateCategory/<%= showCategory[i]._id %>" method="POST">
+                                <div class="mb-3">
+                                    <label for="edittitle" class="form-label">CATEGORY NAME</label>
+                                    <input type="text" class="form-control" id="categoryName" name="categoryName" value="<%= showCategory[i].categoryName %>" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                      
+                      </div>
+                    </div>
+                    <!-- /.modal-dialog -->
+                  </div>
+                  <form action="/admin/deleteCategory/<%= showCategory[i]._id %>" method="POST">
+                    <button class="btn btn-success" type="submit" style="color: #fff">
+                      Delete
+                    </button>
+                  </form>
+                  </div>
+                </td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">VUI LÒNG THAO TÁC CẨN THẬN</div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row huydeV -->
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">THÊM DANH MỤC</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/addCategory" method="POST">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">CATEGORY NAME</label>
+                        <input type="text" name="categoryName" class="form-control" placeholder="Nhập Danh Mục">
+                    </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">ĐÓNG</button>
+                <button type="submit" class="btn btn-primary">THÊM</button>
+            </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+
+
+<script>
+  $(function () {
+    $("#datatable1").DataTable();
+  });
+</script>
+<%- include('_layout/footer.ejs') %>
+

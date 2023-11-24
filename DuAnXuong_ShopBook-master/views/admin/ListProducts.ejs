@@ -1,0 +1,259 @@
+<%- include('_layout/header.ejs') %> <%- include('_layout/nav.ejs') %>
+<% function formatNumber(num) {
+  if (num == null) {
+    return "0"; 
+   } 
+   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); } 
+   %>
+
+<div class="row mb-2">
+  <div class="col-sm-6"></div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      
+      <div class="card-header">
+        <h3 class="card-title">NHÓM PRODUCT</h3>
+        <div class="text-right">
+            <a type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default" class="btn btn-info">THÊM SẢN PHẨM</a>
+        </div>
+    </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="datatable1" class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th>ID</th>
+                <th>TITLE</th>
+                <th>AUTHOR</th>
+                <th>IMAGE</th>
+                <th>YEAR</th>
+                <th>ISBN</th>
+                <th>REVIEW COUNT</th>
+                <th>AVERAGE SCORE</th>
+                <th>PRICE</th>
+                <th>CATEGORY NAME</th>
+                <th>THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i=0; i < showProduct.length; i++) { %>
+              <tr>
+                <td class="text-center">
+                    <%= i+1 %>
+                  </td>
+                <td class="text-center">
+                  <%= showProduct[i].title %>
+                </td>
+                <td class="text-center">
+                  <%= showProduct[i].author %>
+                </td>
+                <td class="text-center">
+                  <img width="150" src="<%= showProduct[i].image %>" alt="">
+                </td>
+                <td class="text-center">
+                  <%= showProduct[i].year %>
+                </td>
+                <td class="text-center">
+                  <%= showProduct[i].isbn %>
+                </td>
+                <td class="text-center">
+                  <%= showProduct[i].review_count %>
+                </td>
+                <td class="text-center">
+                  <%= showProduct[i].average_score %>
+                </td>
+                <td class="text-center">
+                  <%= formatNumber(showProduct[i].price) %>
+                </td>
+                <td class="text-center">
+                  <%= showProduct[i].categoryName %>
+                </td>
+                <td >
+                  <div class="d-flex">
+                    <button class="btn btn-info mr-2" data-toggle="modal" data-target="#huydev<%= showProduct[i]._id %>" type="submit" style="color: #fff" >
+                      Edit
+                    </button>
+                  <div class="modal fade" id="huydev<%= showProduct[i]._id %>">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">EDIT PRODUCT ID [ <%= showProduct[i]._id %> ]</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/admin/updateProduct/<%= showProduct[i]._id %>" method="POST">
+                              <div class="mb-3">
+                                <label for="edittitle" class="form-label">TITLE</label>
+                                <input type="text" class="form-control" id="title" name="title" value="<%= showProduct[i].title %>" required>
+                            </div>
+                                <div class="mb-3">
+                                  <label for="edittitle" class="form-label">AUTHOR</label>
+                                  <input type="text" class="form-control" id="author" name="author" value="<%= showProduct[i].author %>" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="edittitle" class="form-label">IMAGE</label>
+                                <input type="text" class="form-control" id="image" name="image" value="<%= showProduct[i].image %>" required>
+                            </div>
+                                <div class="mb-3">
+                                  <label for="edittitle" class="form-label">YEAR</label>
+                                  <input type="text" class="form-control" id="year" name="year" value="<%= showProduct[i].year %>" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="edittitle" class="form-label">ISBN</label>
+                                <input type="text" class="form-control" id="isbn" name="isbn" value="<%= showProduct[i].isbn %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edittitle" class="form-label">AVERAGE SCORE</label>
+                                <input type="text" class="form-control" id="average_score" name="average_score" value="<%= showProduct[i].average_score %>" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="edittitle" class="form-label">PRICE</label>
+                              <input type="text" class="form-control" id="price" name="price" value="<%= showProduct[i].price %>" required>
+                          </div>
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">DESCRIBE</label>
+                              <input type="text" name="describeProduct" class="form-control" placeholder="Mô Tả Nhỏ" value="<%= showProduct[i].describeProduct %>" required>
+                            </div>
+                            <div class="form-group">
+                              <label for="exampleInputEmail1"
+                                >DESRIPTION</label
+                              >
+                              <textarea
+                                name="descriptionProduct"
+                                placeholder="Nhập Mô Tả Sản Phẩm"
+                                class="textarea"
+                                value="<%= showProduct[i].descriptionProduct %>
+                                required=""
+                              ><%= showProduct[i].descriptionProduct %></textarea>
+                            </div>
+                            <div class="mb-3">
+                              <label for="exampleInputEmail1">CATEGORY NAME</label>
+                              <select class="custom-select" name="categoryName">
+                                <% for(var j=0; j < showCategories.length; j++) { %>
+                                    <option <%= showCategories[j].categorySlug === showProduct[i].categoryName ? 'selected' : 'huydev' %> value="<%= showCategories[j].categorySlug %>">
+                                      <%= showCategories[j].categoryName %></option>
+                                      <%  } %>
+                              </select>
+                              </div>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                      
+                      </div>
+                    </div>
+                    <!-- /.modal-dialog -->
+                  </div>
+                  <form action="/admin/deleteProduct/<%= showProduct[i]._id %>" method="POST">
+                    <button class="btn btn-success" type="submit" style="color: #fff">
+                      Delete
+                    </button>
+                  </form>
+                  </div>
+                </td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">VUI LÒNG THAO TÁC CẨN THẬN</div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row huydeV -->
+
+<div class="modal fade" id="modal-default">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">THÊM SẢN PHẨM</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <form action="/admin/addProduct" method="POST">
+                  <div class="form-group">
+                      <label for="exampleInputEmail1">TITLE</label>
+                      <input type="text" name="title" class="form-control" placeholder="Nhập Tên Sách">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">AUTHOR</label>
+                    <input type="text" name="author" class="form-control" placeholder="Tên Chủ Tịch Sách">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">IMAGE</label>
+                    <input type="text" name="image" class="form-control" placeholder="Địa Chỉ Image Sách">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">YEAR</label>
+                    <input type="text" name="year" class="form-control" placeholder="Thông Tin Sản Xuất">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">ISBN</label>
+                    <input type="text" name="isbn" class="form-control" placeholder="Mã Cuốn Sách">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">AVERAGE SCORE</label>
+                    <input type="text" name="average_score" class="form-control" placeholder="Điểm Trung Bình">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">PRICE</label>
+                    <input type="text" name="price" class="form-control" placeholder="Giá Sách">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">DESCRIBE</label>
+                    <input type="text" name="describeProduct" class="form-control" placeholder="Mô Tả Nhỏ" required="">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1"
+                      >DESRIPTION</label
+                    >
+                    <textarea
+                      name="descriptionProduct"
+                      placeholder="Nhập Mô Tả Sản Phẩm"
+                      class="textarea"
+                      required=""
+                    ></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">CATEGORY NAME</label>
+                    <select class="custom-select" name="categoryName">
+                        <% for(var i=0; i < showCategories.length; i++) { %>
+                            <option value="<%= showCategories[i].categorySlug %>">
+                                <%= showCategories[i].categoryName %></option>
+                        <% } %>
+                    </select>
+                  </div>
+              </div>
+              <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">ĐÓNG</button>
+                  <button type="submit" class="btn btn-primary">THÊM</button>
+              </div>
+          </form>
+      </div>
+      <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+
+
+<script>
+  $(function () {
+    $("#datatable1").DataTable();
+  });
+</script>
+
+<%- include('_layout/footer.ejs') %>

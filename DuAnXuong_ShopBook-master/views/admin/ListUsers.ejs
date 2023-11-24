@@ -1,0 +1,137 @@
+<%- include('_layout/header.ejs') %>
+    <%- include('_layout/nav.ejs') %>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <div class="row mb-2">
+            <div class="col-sm-6"></div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">NHÓM THÀNH VIÊN</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="datatable1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th style="width: 5px">STT</th>
+                                        <th>FULL NAME</th>
+                                        <th>EMAIL</th>
+                                        <th>VAI TRÒ</th>
+                                        <th>NGÀY THAM GIA</th>
+                                        <th>THAO TÁC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(var i=0; i < listUsers.length; i++) { %>
+                                        <tr>
+                                            <td class="text-center">
+                                                <%= i + 1  %>
+                                            </td>
+                                            <td class="text-center">
+                                                <%= listUsers[i].fullname %>
+                                            </td>
+                                            <td class="text-center" style="text-transform: lowercase">
+                                                <%= listUsers[i].email %>
+                                            </td>
+                                            <td class="text-center" style="text-transform: lowercase">
+                                                <%= listUsers[i].level %>
+                                            </td>
+                                            <td class="text-center" width="200" style="text-transform: lowercase">
+                                                <%= new Date(listUsers[i].createdAt).toLocaleString() %>
+                                            </td>
+
+                                            <td>
+                                                <button class="btn btn-info mr-2 text-center" data-toggle="modal" data-target="#modal<%= listUsers[i]._id %>" type="submit" style="color: #fff">
+                  Edit
+                </button>
+                                                <div class="modal fade" id="modal<%= listUsers[i]._id %>">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">EDIT USER ID [
+                                                                    <%= listUsers[i]._id %> ]</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form class="updateUserForm" data-user-id="<%= listUsers[i]._id %>">
+                                                                    <div class="mb-3">
+                                                                        <input type="hidden" name="id" class="userId" value="<%= listUsers[i]._id %>">
+                                                                        <label for="edittitle" class="form-label">LEVEL</label>
+                                                                        <select class="custom-select userLevel" name="level">
+                                                                            <option <%= listUsers[i].level === 'admin' ? 'selected' : '' %> value="admin">Admin</option>
+                                                                            <option <%= listUsers[i].level === 'member' ? 'selected' : '' %> value="member">Member</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                                </form>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">VUI LÒNG THAO TÁC CẨN THẬN</div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <script>
+            $(document).on('submit', '.updateUserForm', function(e) {
+                e.preventDefault();
+
+                // Lấy các giá trị từ form
+                var form = $(this);
+                var userID = form.find('.userId').val();
+                var userLevel = form.find('.userLevel').val();
+
+                // Gửi yêu cầu Ajax
+                $.ajax({
+                    type: "POST",
+                    dataType: "JSON",
+                    url: "/admin/updateUser/" + userID,
+                    data: {
+                        level: userLevel,
+                        id: userID
+                    },
+                    success: function(res) {
+                        $('#modal' + userID).modal('hide');
+                        Swal.fire({
+                            icon: "success",
+                            title: 'Thông Báo',
+                            text: res.message
+                        }).then((result) => {
+                            if (res.status === true) {
+                                $('#datatable1').load(location.href + " #datatable1");
+                            } else {
+                                // Xử lý tình huống khác nếu cần
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+            $(function() {
+                $("#datatable1").DataTable();
+            });
+        </script>
+        <%- include('_layout/footer.ejs') %>

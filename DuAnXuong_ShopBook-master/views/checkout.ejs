@@ -1,0 +1,183 @@
+<%- include('layout/header.ejs') %> 
+<%- include('layout/navbar.ejs', {categories: categories}) %>
+<% function formatNumber(num) {
+  if (num == null) {
+    return "0"; 
+   } 
+   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); } 
+   %>
+<section class="breadcrumb-section">
+  <h2 class="sr-only">Site Breadcrumb</h2>
+  <div class="container">
+    <div class="breadcrumb-contents">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item active">Checkout</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</section>
+<main
+  id="content"
+  class="page-section inner-page-sec-padding-bottom space-db--20"
+>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <!-- Checkout Form s-->
+        <div class="checkout-form">
+          <div class="row row-40">
+            <div class="col-12">
+              <h1 class="quick-title">Checkout</h1>
+              <!-- Slide Down Trigger  -->
+              <div class="checkout-quick-box">
+                <p>
+                  <i class="far fa-sticky-note"></i>Returning customer?
+                  <a
+                    href="javascript:"
+                    class="slide-trigger"
+                    data-target="#quick-login"
+                    >Click here to login</a
+                  >
+                </p>
+              </div>
+        
+              <!-- Slide Down Trigger  -->
+              <div class="checkout-quick-box">
+                <p>
+                  <i class="far fa-sticky-note"></i>Have a coupon?
+                  <a
+                    href="javascript:"
+                    class="slide-trigger"
+                    data-target="#quick-cupon"
+                  >
+                    Click here to enter your code</a
+                  >
+                </p>
+              </div>
+              <!-- Slide Down Blox ==> Cupon Box -->
+              <div class="checkout-slidedown-box" id="quick-cupon">
+                <form action="./">
+                  <div class="checkout_coupon">
+                    <input type="text" class="mb-0" placeholder="Coupon Code" />
+                    <a href="" class="btn btn-outlined">Apply coupon</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-lg-7 mb--20">
+              <!-- Billing Address -->
+              <div id="billing-form" class="mb-40">
+                <h4 class="checkout-title">Billing Address</h4>
+                <div class="row">
+                  <div class="col-md-6 col-12 mb--20">
+                    <label>Full Name*</label>
+                    <input type="text" id="fullname" value="<%= userOrder.fullname %>" placeholder="Full Name" />
+                  </div>
+                  
+                  <div class="col-md-6 col-12 mb--20">
+                    <label>Email Address*</label>
+                    <input type="email" id="email" value="<%= locals.email %>" placeholder="Email Address" />
+                  </div>
+                  <div class="col-md-6 col-12 mb--20">
+                    <label>Phone*</label>
+                    <input type="text" id="phone" placeholder="Phone number" />
+                  </div>
+                  <div class="col-md-6 col-12 mb--20">
+                    <label>Address*</label>
+                    <input type="text" id="address" placeholder="Address " />
+                  </div>
+              
+                  <div class="col-12 mb--20">
+                    <div class="block-border check-bx-wrapper">
+                      <div class="check-box">
+                        <input type="checkbox" id="create_account" />
+                        <label for="create_account">Create an Acount?</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        
+              <div class="order-note-block mt--5">
+                <label for="order-note">Order notes</label>
+                <textarea
+                  id="comment"
+                  cols="30"
+                  rows="10"
+                  class="order-note"
+                  placeholder="Nhập Vấn Đề"
+                ></textarea>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="row">
+                <!-- Cart Total -->
+                <div class="col-12">
+                  <div class="checkout-cart-total">
+                    <h2 class="checkout-title">YOUR ORDER</h2>
+                    <h4>Product <span>Total</span></h4>
+                    <ul>
+                      <% if(products.length === 0) { %>
+                        <p class="text-center text-danger font-weight-bold">Your cart is empty.</p>
+                      <% } else { %>
+                        <% products.forEach(function(product) { %>
+                          <li>
+                            <span class="left"><%= product.item.title %> X <%= product.quantity %></span>
+                            <span class="right"> <%= formatNumber(product.item.price * product.quantity) %></span>
+                          </li>
+                        <% }) %>
+                        <% } %>
+                    </ul>
+                    <p>Sub Total <span><%= products.length !== 0 ? formatNumber(totalPrice) : 0 %> VNĐ</span></p>
+                    <p>Shipping Fee <span>0 VNĐ</span></p>
+                    
+                    <div class="term-block">
+                    <button id="addOrderCart" class="place-order w-100">Place order</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  // Gửi Data
+  $("#addOrderCart").on("click", function() {
+      $.ajax({
+          type: "POST",
+          dataType: "JSON",
+          url: "/orderCart",
+          data: {
+              type: 'orderCart',
+              fullname: $("#fullname").val(),
+              email: $("#email").val(),
+              phone: $("#phone").val(),
+              address: $("#address").val(),
+              comment: $("#comment").val(),
+          },
+          success: function(res) {
+              Swal.fire({
+                  icon: res.status === true ? "success" : "error",
+                  title: 'Thông Báo',
+                  text: res.message
+                  }).then((result) => {
+                  if (res.status === true) {
+                     
+                  } else {
+                    
+                  }
+              });
+          },
+          error: function (xhr, status, error) {
+              console.error(error);
+          },
+      });
+  });
+</script>
+<%- include('layout/footer.ejs') %>

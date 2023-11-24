@@ -1,0 +1,89 @@
+<%- include('_layout/header.ejs') %> <%- include('_layout/nav.ejs') %>
+<style>
+    .rating-block span.star_on {
+    color: #eccd00;
+}
+</style>
+<div class="row mb-2">
+  <div class="col-sm-6"></div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">NHÓM CATEGORY</h3>
+        <div class="text-right">
+            <a type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default" class="btn btn-info">THÊM DANH MỤC</a>
+        </div>
+    </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="datatable1" class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th>ID</th>
+                <th>EMAIL</th>
+                <th>RATING</th>
+                <th>NỘI DUNG</th>
+                <th>SẢN PHẨM</th>
+                <th>THỜI GIAN</th>
+                <th>THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i=0; i < showComment.length; i++) { %>
+              <tr>
+                <td class="text-center">
+                    <%= i+1 %>
+                  </td>
+                <td class="text-center">
+                  <%= showComment[i].email %>
+                </td>
+                <td class="text-center rating-block">
+                    <% for (let j = 1; j <= 5; j++) { %>
+                        <span class="fas fa-star <%= showComment[i].rating >= j ? 'star_on' : '' %>"></span>
+                      <% } %>
+                  </td>
+                  <td class="text-center">
+                    <%= showComment[i].comment %>
+                  </td>
+                  <td class="text-center">
+                    <%= showComment[i].productName %>
+                  </td>   
+                  <td class="text-center">
+                    <%= new Date(showComment[i].createdAt).toLocaleString() %>
+                  </td> 
+                <td >
+                  <div class="text-center">
+                  <a  class="btn btn-danger"  href="/admin/deleteComment/<%= showComment[i]._id %>" style="color: #fff">
+                      Delete
+                  </a>
+                  </div>
+                </td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">VUI LÒNG THAO TÁC CẨN THẬN</div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+
+
+
+
+<script>
+  $(function () {
+    $("#datatable1").DataTable();
+  });
+</script>
+<%- include('_layout/footer.ejs') %>

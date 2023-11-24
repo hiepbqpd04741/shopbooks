@@ -1,0 +1,361 @@
+<%- include('layout/header.ejs') %>
+ <%- include('layout/navbar.ejs', {categories: categories}) %>
+<% function formatNumber(num) {
+   if (num == null) {
+     return "0"; 
+    } 
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); 
+  } 
+%>
+<section class="hero-area hero-slider-2">
+  <div class="container">
+    <div class="row align-items-lg-center">
+      <div class="col-lg-12">
+        <div
+          class="sb-slick-slider"
+          data-slick-setting='{
+                                                                    "autoplay": true,
+                                                                    "autoplaySpeed": 8000,
+                                                                    "slidesToShow": 1,
+                                                                    "dots":true
+                                                                    }'
+        >
+          <div
+            class="single-slide bg-image bg-position-left bg-position-lg-center"
+            data-bg="https://htmldemo.net/pustok/pustok/image/bg-images/home-2-slider-1.jpg"
+          >
+            <div class="home-content text-left text-md-center pl--30 pl-md--0">
+              <div class="row">
+                <div class="col-lg-7 col-xl-5 col-md-6 col-sm-6">
+                  <span class="title-small">Beautifully Designed</span>
+                  <h2>INSTA</h2>
+                  <p>Cover up front of book and <br />leave summary</p>
+                  <a href="#" class="btn btn-outlined--primary">
+                    Shop Now
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="single-slide bg-image"
+            data-bg="https://htmldemo.net/pustok/pustok/image/bg-images/home-2-slider-2.jpg"
+          >
+            <div class="home-content pl--30">
+              <div class="row">
+                <div class="col-lg-7">
+                  <span class="title-mid">Book Mockup</span>
+                  <h2 class="h2-v2">Hardcover.</h2>
+                  <p>Cover up front of book and <br />leave summary</p>
+                  <a href="#" class="btn btn-outlined--primary">
+                    Shop Now
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mb--30">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-3 col-md-6 mt--30">
+        <div class="feature-box h-100">
+          <div class="icon">
+            <i class="fas fa-shipping-fast"></i>
+          </div>
+          <div class="text">
+            <h5>Free Shipping Item</h5>
+            <p>Orders over 15.000</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6 mt--30">
+        <div class="feature-box h-100">
+          <div class="icon">
+            <i class="fas fa-redo-alt"></i>
+          </div>
+          <div class="text">
+            <h5>Money Back Guarantee</h5>
+            <p>100% money back</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6 mt--30">
+        <div class="feature-box h-100">
+          <div class="icon">
+            <i class="fas fa-piggy-bank"></i>
+          </div>
+          <div class="text">
+            <h5>Cash On Delivery</h5>
+            <p>Lorem ipsum dolor amet</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6 mt--30">
+        <div class="feature-box h-100">
+          <div class="icon">
+            <i class="fas fa-life-ring"></i>
+          </div>
+          <div class="text">
+            <h5>Help & Support</h5>
+            <p>Call us : 0901.961.341</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="sb-custom-tab">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            id="shop-tab"
+            data-bs-toggle="tab"
+            href="#shop"
+            role="tab"
+            aria-controls="shop"
+            aria-selected="true"
+          >
+            Featured Products
+          </a>
+          <span class="arrow-icon"></span>
+        </li>
+     
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div
+          class="tab-pane show active"
+          id="shop"
+          role="tabpanel"
+          aria-labelledby="shop-tab"
+        >
+          <div
+            class="product-slider multiple-row slider-border-multiple-row sb-slick-slider"
+            data-slick-setting='{
+                                "autoplay": true,
+                                "autoplaySpeed": 8000,
+                                "slidesToShow": 5,
+                                "rows":2,
+                                "dots":true
+                            }'
+            data-slick-responsive='[
+                                {"breakpoint":1200, "settings": {"slidesToShow": 3} },
+                                {"breakpoint":768, "settings": {"slidesToShow": 2} },
+                                {"breakpoint":480, "settings": {"slidesToShow": 1} },
+                                {"breakpoint":320, "settings": {"slidesToShow": 1} }
+                            ]'
+          >
+            <% products.forEach((product) => { %>
+            <!-- product -->
+            <div class="single-slide">
+              <div class="product-card">
+                <div class="product-header">
+                  <a href="" class="author"> <%= product.author %> </a>
+                  <h3>
+                    <a href="/detail/<%= product.slugProduct %>"
+                      ><%= product.title %></a
+                    >
+                  </h3>
+                </div>
+                <div class="product-card--body">
+                  <div class="card-image">
+                    <img
+                      src="<%= product.image %>"
+                      alt="<%= product.title %>"
+                    />
+                    <div class="hover-contents">
+                      <a
+                        href="/detail/<%= product.slugProduct %>"
+                        class="hover-image"
+                      >
+                        <img
+                          src="<%= product.image %>"
+                          alt="<%= product.title %>"
+                        />
+                      </a>
+                      <div class="hover-btns">
+                        <a href="/cart" class="single-btn">
+                          <i class="fas fa-shopping-basket"></i>
+                        </a>
+                        <a
+                          href="#"
+                          data-bs-toggle="modal"
+                          data-bs-target="#<%= product.slugProduct %>"
+                          class="single-btn"
+                        >
+                          <i class="fas fa-eye"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="price-block">
+                    <span class="price"
+                      ><%= formatNumber(product.price) %></span
+                    >
+                    <span class="price-discount">20%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end product -->
+            <% }); %>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<% products.forEach((product) => { %>
+<div
+  class="modal fade modal-quick-view"
+  
+  id="<%= product.slugProduct %>"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="<%= product.slugProduct %>"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+      <div class="product-details-modal">
+        <div class="row">
+          <div class="col-lg-5">
+            <!-- Product Details Slider Big Image-->
+            <div class="product-details-slider sb-slick-slider arrow-type-two">
+              <div class="single-slide">
+                <img src="<%= product.image %>" alt="<%= product.title %>" />
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-7 mt--30 mt-lg--30">
+            <div class="product-details-info pl-lg--30">
+              <p class="tag-block">
+                <a href="/detail/<%= product.slugProduct %>"
+                  ><%= product.author%></a
+                >
+              </p>
+              <h3 class="product-title"><%= product.title %></h3>
+              <div class="price-block">
+                <span class="price-new"
+                  ><%= formatNumber(product.price) %>
+                </span>
+              </div>
+              <div class="rating-widget">
+                <div class="rating-block">
+                  <span class="fas fa-star star_on"></span>
+                  <span class="fas fa-star star_on"></span>
+                  <span class="fas fa-star star_on"></span>
+                  <span class="fas fa-star star_on"></span>
+                  <span class="fas fa-star"></span>
+                </div>
+                <div class="review-widget">
+                  <a href="">(1 Reviews)</a> <span>|</span>
+                  <a href="">Write a review</a>
+                </div>
+              </div>
+              <article class="product-details-article">
+                <h4 class="sr-only">Product Summery</h4>
+                <p><%= product.describeProduct %></p>
+              </article>
+              <div class="add-to-cart-row">
+                <div class="count-input-block">
+                  <span class="widget-label">Quantity</span>
+                  <input
+                    type="number"
+                    id="quantity_<%= product.slugProduct %>"
+                    class="form-control text-center"
+                    value="1"
+                  />
+                </div>
+                <div class="add-cart-btn">
+                  <button type="submit" id="addToCart_<%= product.slugProduct %>"
+                    class="btn btn-outlined--primary"
+                    data-bs-dismiss="modal">
+              <span class="plus-icon">+</span>Add to Cart
+            </button>
+            
+              </div>
+              </div>
+              <div class="compare-wishlist-row">
+                <a href="" class="add-link"
+                  ><i class="fas fa-heart"></i>Add to Wish List</a
+                >
+                <a href="" class="add-link"
+                  ><i class="fas fa-random"></i>Add to Compare</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="widget-social-share">
+          <span class="widget-label">Share:</span>
+          <div class="modal-social-share">
+            <a href="#" class="single-icon"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a href="#" class="single-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="single-icon"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="single-icon"
+              ><i class="fab fa-google-plus-g"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $("#addToCart_<%= product.slugProduct %>").on("click",function() {
+      $.ajax({
+      type: "POST",   
+      url: "/addToCart",
+      dataType: 'JSON',
+      data: {
+          type: "addToCart",
+          quantity: $("#quantity_<%= product.slugProduct %>").val(),
+          slugProduct: "<%= product.slugProduct %>"
+      },
+      success: function(res) {
+          Swal.fire({
+                  icon: res.status === true ? "success" : "error",
+                  title: 'Thông Báo',
+                  text: res.message
+                  }).then((result) => {
+                  if (res.status === true) {
+                      window.location.href = '/cart';
+                  } else {
+                    
+                  }
+              });
+      },
+      error: function(error) {
+          console.log(error);
+      }
+  });
+})
+</script>
+
+<% }); %> 
+
+
+<%- include('layout/footer.ejs') %>
